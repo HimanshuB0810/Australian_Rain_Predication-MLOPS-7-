@@ -1,0 +1,43 @@
+version: 2.1
+
+# 1. Import the official CircleCI Docker orb to handle Docker commands cleanly
+orbs:
+  docker: circleci/docker@2.4.0
+
+jobs:
+  train-and-deploy:
+    docker:
+      # Using a stable Python image that matches your project version
+      - image: cimg/python:3.9.25
+    steps:
+      - checkout
+
+      # Step 2: Set up dependencies and execute the training pipeline
+      - run:
+          name: Install Dependencies and Run Training Pipeline
+          command: |
+            python -m pip install --upgrade pip
+            if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+            pip install -e .
+            python pipeline/training_pipeline.py
+
+      # Step 3: Authenticate, Build, and Push the Docker Image using the Orb
+      # This automatically picks up your UI Environment Variables
+      - docker/check:
+          registry: docker.io
+      - docker/build:
+          image: $DOCKERHUB_USERNAME/australian-rain-prediction
+          tag: "latest,$CIRCLE_SHA1"
+      - docker/push:
+          image: $DOCKERHUB_USERNAME/australian-rain-prediction
+          tag: "latest,$CIRCLE_SHA1"
+
+# 4. Define the workflow structure
+workflows:
+  version: 2
+  mlops-pipeline:
+    jobs:
+      - train-and-deploy:
+          filters:
+            branches:
+              only: main
