@@ -43,20 +43,22 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # Step 6: Extract metadata for Docker (tags, labels)
+    # Step 6: Extract metadata for Docker (Handles lowercasing automatically)
     - name: Extract Docker Metadata
       id: meta
       uses: docker/metadata-action@v5
       with:
         images: ${{ secrets.DOCKERHUB_USERNAME }}/australian-rain-prediction
+        tags: |
+          type=raw,value=latest
+          type=sha,format=long
 
-    # Step 7: Build and Push Docker Image
+    # Step 7: Build and Push Docker Image using the extracted metadata tags
     - name: Build and Push Docker Image
       uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/australian-rain-prediction:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/australian-rain-prediction:${{ github.sha }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
