@@ -38,7 +38,7 @@ class DataProcessing:
 
             self.df.drop(columns=['Date'],inplace=True)
 
-            cat_cols = self.df.select_dtypes(include="str").columns
+            cat_cols = self.df.select_dtypes(include="object").columns
             num_cols = self.df.select_dtypes(exclude="str").columns
 
             for col in num_cols:
@@ -100,7 +100,7 @@ class DataProcessing:
             logger.info("Data Spiltting and Smote Done")
 
         except Exception as e:
-            logger.error("Error while Data Spiltting and Smote")
+            logger.error("Error while Data Spiltting and Smote")    
             raise CustomException("Error while Data Spiltting and Smote",e)
 
     def run(self):
