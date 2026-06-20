@@ -1,0 +1,421 @@
+/* ============================================================
+   Australian Weather Rain Prediction — style.css
+   Matches the preview exactly.
+   Fonts: Outfit (display) + Inter (body/UI)
+============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Animated rain canvas covering the full page ── */
+@keyframes rain-fall {
+  0%   { background-position: 0 0; }
+  100% { background-position: 120px 240px; }
+}
+
+/* ── Body — full-page sky + moving rain streaks ── */
+.wx-body {
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  padding: 0 0 3rem;
+  position: relative;
+  overflow-x: hidden;
+  /* Sky gradient that spans the whole page */
+  background-color: #0b1d35;
+  background-image:
+    /* Animated diagonal rain streaks only — no gradient bleed */
+    repeating-linear-gradient(
+      108deg,
+      transparent 0px, transparent 22px,
+      rgba(147, 210, 255, 0.06) 22px,
+      rgba(147, 210, 255, 0.06) 23px
+    );
+  background-size: 120px 120px;
+  background-attachment: fixed;
+  animation: rain-fall 3s linear infinite;
+}
+
+/* ── Hero banner — transparent so body gradient shows through ── */
+.wx-hero {
+  background: transparent;
+  padding: 3rem 2rem 5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Soft cloud fade at the bottom of the hero */
+.cloud-layer {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: radial-gradient(ellipse 60% 80px at 50% 100%, #f0f9ff 0%, transparent 100%);
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+/* Star particles */
+.wx-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 18%, rgba(186,230,255,0.55) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 55% 30%, rgba(186,230,255,0.40) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 78% 12%, rgba(186,230,255,0.55) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 36% 45%, rgba(186,230,255,0.30) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 90% 35%, rgba(186,230,255,0.45) 0%, transparent 100%),
+    radial-gradient(1px   1px   at  8% 60%, rgba(186,230,255,0.25) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* No ::after needed on hero — rain streaks come from body now */
+.wx-hero::after { display: none; }
+
+/* ── Badge pill ── */
+.wx-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(8,145,178,0.25);
+  border: 1px solid rgba(8,145,178,0.5);
+  color: #7dd3fc;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 1.2rem;
+  position: relative;
+}
+
+/* Pulsing live dot inside badge */
+.wx-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* ── Hero title ── */
+.wx-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  font-weight: 800;
+  color: #f0f9ff;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+  position: relative;
+}
+
+.wx-title span {
+  color: #38bdf8;
+}
+
+/* ── Hero subtitle ── */
+.wx-subtitle {
+  color: #93c5fd;
+  font-size: 0.95rem;
+  font-weight: 400;
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.6;
+  position: relative;
+}
+
+/* ── Stat pills row ── */
+.wx-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.wx-stat {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(147,210,255,0.15);
+  border-radius: 10px;
+  padding: 0.65rem 1.2rem;
+  text-align: center;
+  min-width: 90px;
+}
+
+.wx-stat-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #38bdf8;
+  line-height: 1;
+}
+
+.wx-stat-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: #7dd3fc;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+/* ── Card wrapper — centres and pulls card over hero ── */
+.wx-card-wrap {
+  max-width: 780px;
+  margin: -2.5rem auto 0;
+  padding: 0 1rem;
+}
+
+/* ── White form card ── */
+.wx-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2rem 2.2rem 2.4rem;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* ── Card header row ── */
+.wx-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.4rem;
+  padding-bottom: 1rem;
+  border-bottom: 1.5px solid #e0f2fe;
+}
+
+.wx-card-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0891b2, #0c4a6e);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wx-card-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.wx-card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0c4a6e;
+  letter-spacing: -0.01em;
+}
+
+.wx-card-sub {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+/* ── Section blocks ── */
+.wx-section {
+  margin-bottom: 1.1rem;
+}
+
+.wx-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0891b2;
+  margin-bottom: 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Gradient rule after section label */
+.wx-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, #bae6fd, transparent);
+}
+
+/* ── Input grid ── */
+.wx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.65rem;
+}
+
+.wx-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ── Field labels ── */
+.wx-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+/* ── Text inputs ── */
+.wx-input {
+  height: 36px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  width: 100%;
+}
+
+.wx-input::placeholder {
+  color: #94a3b8;
+}
+
+.wx-input:focus {
+  border-color: #0891b2;
+  box-shadow: 0 0 0 3px rgba(8,145,178,0.13);
+  background: #ffffff;
+}
+
+.wx-input:valid:not(:placeholder-shown) {
+  border-color: #0891b2;
+  background: #ecfeff;
+  color: #0c4a6e;
+}
+
+/* ── Submit button ── */
+.wx-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 1.4rem;
+  height: 52px;
+  background: linear-gradient(135deg, #0891b2 0%, #0c4a6e 100%);
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(8,145,178,0.4);
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+
+.wx-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.wx-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(8,145,178,0.5);
+  filter: brightness(1.08);
+}
+
+.wx-btn:active {
+  transform: translateY(0);
+  filter: brightness(0.96);
+}
+
+/* ── Prediction result panel ── */
+.wx-result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 1.2rem;
+  padding: 1rem 1.4rem;
+  background: linear-gradient(135deg, #ecfeff 0%, #e0f2fe 100%);
+  border: 1.5px solid #7dd3fc;
+  border-radius: 12px;
+}
+
+.wx-result-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #0891b2, #0c4a6e);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wx-result-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.wx-result-text {
+  font-size: 12px;
+  color: #0891b2;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.wx-result-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0c4a6e;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* ── Footer ── */
+.wx-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.wx-footer span {
+  color: #0891b2;
+  font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (max-width: 520px) {
+  .wx-hero { padding: 2.5rem 1rem 4.5rem; }
+  .wx-card { padding: 1.4rem 1rem 1.8rem; }
+  .wx-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 380px) {
+  .wx-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Accessibility ── */
+@media (prefers-reduced-motion: reduce) {
+  .wx-body         { animation: none; }
+  .wx-dot          { animation: none; }
+  .wx-btn,
+  .wx-input        { transition: none; }
+}
