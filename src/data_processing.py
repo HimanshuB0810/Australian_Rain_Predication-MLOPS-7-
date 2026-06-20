@@ -39,7 +39,7 @@ class DataProcessing:
             self.df.drop(columns=['Date'],inplace=True)
 
             cat_cols = self.df.select_dtypes(include="object").columns
-            num_cols = self.df.select_dtypes(exclude="str").columns
+            num_cols = self.df.select_dtypes(exclude="object").columns
 
             for col in num_cols:
                 self.df[col] = self.df[col].fillna(self.df[col].mean())
