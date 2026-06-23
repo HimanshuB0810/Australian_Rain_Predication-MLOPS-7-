@@ -1,18 +1,16 @@
 version: 2.1
 
-# 1. Import the official CircleCI Docker orb to handle Docker commands cleanly
 orbs:
   docker: circleci/docker@2.4.0
 
 jobs:
   train-and-deploy:
     docker:
-      # Using a stable Python image that matches your project version
       - image: cimg/python:3.9.25
     steps:
       - checkout
 
-      # Step 2: Set up dependencies and execute the training pipeline
+      # Step 1: Install dependencies and run your ML pipeline
       - run:
           name: Install Dependencies and Run Training Pipeline
           command: |
@@ -21,8 +19,11 @@ jobs:
             pip install -e .
             python pipeline/training_pipeline.py
 
+      # STEP 2: ENABLE REMOTE DOCKER ENGINE (This fixes the daemon connection error)
+      - setup_remote_docker:
+          version: 20.10.24  # Specifies a secure, stable version of the remote Docker daemon
+
       # Step 3: Authenticate, Build, and Push the Docker Image using the Orb
-      # This automatically picks up your UI Environment Variables
       - docker/check:
           registry: docker.io
       - docker/build:
@@ -32,7 +33,6 @@ jobs:
           image: $DOCKERHUB_USERNAME/australian-rain-prediction
           tag: "latest,$CIRCLE_SHA1"
 
-# 4. Define the workflow structure
 workflows:
   version: 2
   mlops-pipeline:
