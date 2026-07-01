@@ -1,5 +1,4 @@
 
-```markdown
 # 🌧️ Australian Rain Prediction System (MLOps)
 
 An end-to-end, production-grade Machine Learning Engineering and MLOps project designed to predict whether it will rain tomorrow in Australia. Built using the classic **Rain in Australia** dataset, this project implements professional software engineering principles, modular pipeline architecture, strict logging, custom exception handling, containerization, and automated Continuous Integration / Continuous Deployment (CI/CD) workflows.
